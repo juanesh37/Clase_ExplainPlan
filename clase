@@ -88,3 +88,17 @@ from test_case where col_pk <= 1000 or col_pk > 990000)
 
 select * from table
 (DBMS_XPLAN.DISPLAY('PLAN_TABLE', 'bad3', 'TYPICAL ') );
+
+-- vamos a cambiar el rango por un not between
+
+select * from test_case
+where col_d2 = (select min (col_d2)
+from test_case where col_pk NOT BETWEEN 1001 AND 990000)
+
+EXPLAIN PLAN SET STATEMENT_ID = 'bad4' FOR
+select * from test_case
+where col_d2 = (select min(col_d2)
+from test_case where col_pk <= 1000 or col_pk > 990000)
+
+select * from table
+(DBMS_XPLAN.DISPLAY('PLAN_TABLE', 'bad4', 'TYPICAL ') );
